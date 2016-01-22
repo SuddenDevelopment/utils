@@ -14,6 +14,7 @@ for node
 npm install suddenutils
 </pre>
 
-h2. notable functions
+notable functions
+======
 - deepkeys : recursively look for all properties in an object until you hit an array, creats string paths 'firstpath.childpath'
 - defaults : define a defaults object, and an object with some values, get back the defaults with overrides
