@@ -1,0 +1,22 @@
+{
+  "name": "suddenutils",
+  "main": "utils.js",
+  "version": "1.0",
+  "homepage": "https://github.com/SuddenDevelopment/utils",
+  "authors": [
+    "SuddenDevelopment <anthony.aragues@gmail.com>"
+  ],
+  "description": "more javascript utilities",
+  "moduleType": [],
+  "keywords": [
+    "utilities"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "name": "utils",
-  "version": "1.0.0",
-  "description": "another set of javascript util functions",
+  "name": "suddenutils",
+  "version": "1.0.1",
+  "description": "Javascript utilities",
   "main": "utils.js",
   "directories": {
     "test": "test"
@@ -22,4 +22,19 @@
     "url": "https://github.com/SuddenDevelopment/utils/issues"
   },
   "homepage": "https://github.com/SuddenDevelopment/utils#readme"
+    "test": "mocha -R spec ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SuddenDevelopment/utils.git"
+  },
+  "keywords": [
+    "utilities"
+  ],
+  "author": "Anthony Aragues <anthony.aragues@gmail.com> (http://suddendevelopment.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SuddenDevelopment/utils/issues"
+  },
+  "homepage": "https://github.com/SuddenDevelopment/utils"
 }
