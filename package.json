@@ -1,0 +1,25 @@
+{
+  "name": "utils",
+  "version": "1.0.0",
+  "description": "another set of javascript util functions",
+  "main": "utils.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuddenDevelopment/utils.git"
+  },
+  "keywords": [
+    "utils"
+  ],
+  "author": "SuddenDevelopment",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SuddenDevelopment/utils/issues"
+  },
+  "homepage": "https://github.com/SuddenDevelopment/utils#readme"
+}
