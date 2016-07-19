@@ -88,6 +88,28 @@ var utils = function(){
       }
       return set;
     }
+    self.stripFields = function(objData,arrFields){
+      //array of fields loop
+      self.for(arrFields,function(v,k){
+        //properties of object loop
+        self.forOwn(objData,function(vv,kk){
+          if(v===kk){ delete objData[kk]; }
+        });
+      });
+    }
+    self.keepFields = function(objData,arrFields){
+      //object properties loop
+      self.forOwn(objData,function(v,k){
+        var fKeep = false;
+        //array of fields to keep loop
+        self.for(arrFields,function(vv,kk){
+          if(k===vv){ fKeep=true; }
+        })
+        if(fKeep===false){
+          delete objData[v];
+        }
+      });  
+    }
     //----====|| STRINGS ||====----\\
     self.strCount = function(strNeedle,strHaystack,objOptions){
         if(objOptions && typeof objOptions.preserveCase!== 'undefined' && objOptions.preserveCase === false){ 
