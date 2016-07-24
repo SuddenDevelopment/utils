@@ -3,6 +3,7 @@ var utils = function(){
   //----====|| UTILITY FUNCTIONS ||====----\\
   //get a value from a defined path in an object
    // https://jsperf.com/lodash-get-vs-monster-method/2
+   self.test = function(){ console.log('utils lib is working.'); }
    self.get = function(objModel, strPath) {
         var arrProps = strPath.split('.'),
             prop = objModel;
@@ -129,3 +130,13 @@ var utils = function(){
     //----====|| END UTILITY FUNCTIONS ||====----\\
 }
 if (typeof module !== 'undefined' && module.exports){module.exports = utils;}
+else{
+  //this loads it in global
+  var _ = new utils;
+  //this is to load it in angular
+  var suddenutils = angular.module('suddenutils',[]);
+  suddenutils.factory('_', ['$window', function($window) {
+  return $window._;
+}]);
+
+}
