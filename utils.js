@@ -4,6 +4,12 @@ var utils = function(){
   //get a value from a defined path in an object
    // https://jsperf.com/lodash-get-vs-monster-method/2
    self.test = function(){ console.log('utils lib is working.'); }
+   //find the index of a given value in an array of objects 
+   self.getIndex = function(arr,strKey,val){
+    self.for(arr,function(v,k){
+      if(v[strKey]===val){return k;}
+    });
+   };
    self.get = function(objModel, strPath) {
         var arrProps = strPath.split('.'),
             prop = objModel;
@@ -44,11 +50,24 @@ var utils = function(){
      self.deepKeys = function(objData){
         var arrKeys = [];
         self.forOwn(objData,function(v,k){
-            if(typeof v ==='object' && v!== null && v.constructor!==Array){ 
-                self.forEach(self.deepKeys(v),function(vv,kk){
-                    arrKeys.push(k+'.'+vv);
-                }); 
+            //this requires recursion
+            if(typeof v ==='object' && v!== null){ 
+                //array recursion
+                if(v.constructor===Array){
+                  for(var i=0;i<v.length;i++){
+                    self.forEach(self.deepKeys(v[i]),function(vv,kk){ 
+                      arrKeys.push(k+'.'+vv); 
+                    }); 
+                  }
+                }
+                //object recursion
+                else{ 
+                  self.forEach(self.deepKeys(v),function(vv,kk){ 
+                    arrKeys.push(k+'.'+vv); 
+                  }); 
+                }
             }
+            //this is a leaf node property
             else{ arrKeys.push(k); }
         });
         return arrKeys;
