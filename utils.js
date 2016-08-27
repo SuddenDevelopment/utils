@@ -5,11 +5,15 @@ var utils = function(){
    // https://jsperf.com/lodash-get-vs-monster-method/2
    self.test = function(){ console.log('utils lib is working.'); }
    //find the index of a given value in an array of objects 
-   self.getIndex = function(arr,strKey,val){
-    self.for(arr,function(v,k){
-      if(v[strKey]===val){return k;}
-    });
-   };
+   self.getIndex = function(arr, key, value) {
+        for (var i=arr.length-1;i>=0;i--) {
+            if (arr[i][key] === value) {
+                delete arr; // What is happening here? This triggers an error in strict mode.
+                return i;
+            }
+        }
+        return -1;
+    };
    self.get = function(objModel, strPath) {
         var arrProps = strPath.split('.'),
             prop = objModel;
