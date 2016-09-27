@@ -3,7 +3,7 @@ var utils = function(){
   //----====|| UTILITY FUNCTIONS ||====----\\
   //get a value from a defined path in an object
    // https://jsperf.com/lodash-get-vs-monster-method/2
-   self.test = function(){ console.log('utils lib is working.'); }
+   self.test = function(varSomething){ console.log('utils lib is working: ',varSomething); }
    //find the index of a given value in an array of objects 
    self.getIndex = function(arr, key, value) {
         for (var i=arr.length-1;i>=0;i--) {
@@ -26,11 +26,14 @@ var utils = function(){
     // credit: http://jsfiddle.net/jfriend00/Sxz2z/
     self.set = function(obj, path, value) {
       var tags = path.split("."), len = tags.length - 1;
-      for (var i = 0; i < len; i++) {
-          obj = obj[tags[i]];
+      for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
+      obj[tags[len]] = value;
     }
-    obj[tags[len]] = value;
-}
+    self.remove = function(obj,path){
+      var tags = path.split("."), len = tags.length - 1;
+      for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
+      delete obj[tags[len]];
+    }
     //for each property in an object
      self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
     //trick forEach
@@ -41,6 +44,13 @@ var utils = function(){
         i++;
       }
     };
+    self.arrSort = function(a,b){
+      if (a.intSort < b.intSort)
+        return -1;
+      if (a.intSort > b.intSort)
+        return 1;
+      return 0;
+    }
      self.for = function(arr,fn){ for(var i=arr.length-1;i>=0;i--){ fn(arr[i],i); } }
      self.defaults = function(objTarget,objDefaults){
       self.forOwn(objDefaults,function(v,k){ 
