@@ -34,6 +34,26 @@ var utils = function(){
       for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
       delete obj[tags[len]];
     }
+    self.stripFields = function(objData,arrFields){
+      //array of fields loop
+      self.for(arrFields,function(v,k){
+        self.remove(objData,v);
+      });
+    }
+    self.keepFields = function(objData,arrFields){
+      //TODO probably needs to be converted to supporting deep paths like parent.child like stripFields
+      //object properties loop
+      self.forOwn(objData,function(v,k){
+        var fKeep = false;
+        //array of fields to keep loop
+        self.for(arrFields,function(vv,kk){
+          if(k===vv){ fKeep=true; }
+        })
+        if(fKeep===false){
+          delete objData[v];
+        }
+      });  
+    }
     //for each property in an object
      self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
     //trick forEach
@@ -122,28 +142,7 @@ var utils = function(){
       }
       return set;
     }
-    self.stripFields = function(objData,arrFields){
-      //array of fields loop
-      self.for(arrFields,function(v,k){
-        //properties of object loop
-        self.forOwn(objData,function(vv,kk){
-          if(v===kk){ delete objData[kk]; }
-        });
-      });
-    }
-    self.keepFields = function(objData,arrFields){
-      //object properties loop
-      self.forOwn(objData,function(v,k){
-        var fKeep = false;
-        //array of fields to keep loop
-        self.for(arrFields,function(vv,kk){
-          if(k===vv){ fKeep=true; }
-        })
-        if(fKeep===false){
-          delete objData[v];
-        }
-      });  
-    }
+
     //----====|| STRINGS ||====----\\
     self.strCount = function(strNeedle,strHaystack,objOptions){
         if(objOptions && typeof objOptions.preserveCase!== 'undefined' && objOptions.preserveCase === false){ 
