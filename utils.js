@@ -26,10 +26,14 @@ var utils = function(){
     // credit: http://jsfiddle.net/jfriend00/Sxz2z/
     self.set = function(obj, path, value) {
       var tags = path.split("."), len = tags.length - 1;
-      for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
+      for (var i = 0; i < len; i++) {
+        //set parent paths if they dont exist
+        if(!obj.hasOwnProperty(tags[i])){ obj[tags[i]]={}; }
+        obj = obj[tags[i]]; 
+      }
       obj[tags[len]] = value;
     }
-    self.remove = function(obj,path){
+    self.del = function(obj,path){
       var tags = path.split("."), len = tags.length - 1;
       for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
       delete obj[tags[len]];
@@ -41,7 +45,7 @@ var utils = function(){
       });
     }
     self.keepFields = function(objData,arrFields){
-      //TODO probably needs to be converted to supporting deep paths like parent.child like stripFields
+      //TODO probably needs to be converted to supporting deep paths like parent.child like stripFields, better version inside json.decor
       //object properties loop
       self.forOwn(objData,function(v,k){
         var fKeep = false;
@@ -56,7 +60,7 @@ var utils = function(){
     }
     //for each property in an object
      self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
-    //trick forEach
+    //trick forEach, destructive to the array but fast
      self.forEach = function(arr,fn){
       var v,i=0;
       while(v=arr.pop()){ 
