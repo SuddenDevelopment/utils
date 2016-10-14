@@ -86,7 +86,6 @@ var utils = function(){
       return objTarget;
     };
      //return an array of all keys full dpeth recursion
-     self.arrPush = function(arr,k,v){ arr.push(k+'.'+v); };
      self.deepKeys = function(objData){
         var arrKeys = [];
         self.forOwn(objData,function(v,k){
@@ -95,12 +94,16 @@ var utils = function(){
                 //array recursion
                 if(v.constructor===Array){
                   for(var i=0;i<v.length;i++){
-                    self.forEach(self.deepKeys(v[i]),self.arrPush(arrKeys,k,vv)); 
+                    self.forEach(self.deepKeys(v[i]),function(vv,kk){ 
+                    arrKeys.push(k+'.'+vv); 
+                  }); 
                   }
                 }
                 //object recursion
                 else{ 
-                  self.forEach(self.deepKeys(v),self.arrPush(arrKeys,k,vv)); 
+                  self.forEach(self.deepKeys(v),function(vv,kk){ 
+                    arrKeys.push(k+'.'+vv); 
+                  }); 
                 }
             }
             //this is a leaf node property
