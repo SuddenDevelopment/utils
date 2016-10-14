@@ -1,14 +1,15 @@
 var utils = function(){
+  'use strict';
   var self=this;
   //----====|| UTILITY FUNCTIONS ||====----\\
   //get a value from a defined path in an object
    // https://jsperf.com/lodash-get-vs-monster-method/2
-   self.test = function(varSomething){ console.log('utils lib is working: ',varSomething); }
+   self.test = function(varSomething){ console.log('utils lib is working: ',varSomething); };
    //find the index of a given value in an array of objects 
    self.getIndex = function(arr, key, value) {
         for (var i=arr.length-1;i>=0;i--) {
             if (arr[i][key] === value) {
-                delete arr; // What is happening here? This triggers an error in strict mode.
+                arr=[]; 
                 return i;
             }
         }
@@ -32,18 +33,18 @@ var utils = function(){
         obj = obj[tags[i]]; 
       }
       obj[tags[len]] = value;
-    }
+    };
     self.del = function(obj,path){
       var tags = path.split("."), len = tags.length - 1;
       for (var i = 0; i < len; i++) { obj = obj[tags[i]]; }
       delete obj[tags[len]];
-    }
+    };
     self.stripFields = function(objData,arrFields){
       //array of fields loop
       self.for(arrFields,function(v,k){
         self.remove(objData,v);
       });
-    }
+    };
     self.keepFields = function(objData,arrFields){
       //TODO probably needs to be converted to supporting deep paths like parent.child like stripFields, better version inside json.decor
       //object properties loop
@@ -52,18 +53,18 @@ var utils = function(){
         //array of fields to keep loop
         self.for(arrFields,function(vv,kk){
           if(k===vv){ fKeep=true; }
-        })
+        });
         if(fKeep===false){
           delete objData[v];
         }
       });  
-    }
+    };
     //for each property in an object
      self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
     //trick forEach, destructive to the array but fast
      self.forEach = function(arr,fn){
       var v,i=0;
-      while(v=arr.pop()){ 
+      while(v=arr.pop()){
         fn(v,i); 
         i++;
       }
@@ -74,8 +75,8 @@ var utils = function(){
       if (a.intSort > b.intSort)
         return 1;
       return 0;
-    }
-     self.for = function(arr,fn){ for(var i=arr.length-1;i>=0;i--){ fn(arr[i],i); } }
+    };
+     self.for = function(arr,fn){ for(var i=arr.length-1;i>=0;i--){ fn(arr[i],i); } };
      self.defaults = function(objTarget,objDefaults){
       self.forOwn(objDefaults,function(v,k){ 
         if(!objTarget[k]){ objTarget[k]= v;}
@@ -85,6 +86,7 @@ var utils = function(){
       return objTarget;
     };
      //return an array of all keys full dpeth recursion
+     self.arrPush = function(arr,k,v){ arr.push(k+'.'+v); };
      self.deepKeys = function(objData){
         var arrKeys = [];
         self.forOwn(objData,function(v,k){
@@ -93,16 +95,12 @@ var utils = function(){
                 //array recursion
                 if(v.constructor===Array){
                   for(var i=0;i<v.length;i++){
-                    self.forEach(self.deepKeys(v[i]),function(vv,kk){ 
-                      arrKeys.push(k+'.'+vv); 
-                    }); 
+                    self.forEach(self.deepKeys(v[i]),self.arrPush(arrKeys,k,vv)); 
                   }
                 }
                 //object recursion
                 else{ 
-                  self.forEach(self.deepKeys(v),function(vv,kk){ 
-                    arrKeys.push(k+'.'+vv); 
-                  }); 
+                  self.forEach(self.deepKeys(v),self.arrPush(arrKeys,k,vv)); 
                 }
             }
             //this is a leaf node property
@@ -145,7 +143,7 @@ var utils = function(){
         if (uv) { set.push(value); }
       }
       return set;
-    }
+    };
 
     //----====|| STRINGS ||====----\\
     self.strCount = function(strNeedle,strHaystack,objOptions){
@@ -161,14 +159,14 @@ var utils = function(){
             objResults[v] = self.strCount(v,strHaystack,objOptions);
         });
         return objResults;
-    }
+    };
     
     //----====|| END UTILITY FUNCTIONS ||====----\\
-}
+};
 if (typeof module !== 'undefined' && module.exports){module.exports = utils;}
 else{
   //this loads it in global
-  var _ = new utils;
+  var _ = new utils();
   //this is to load it in angular
   var suddenutils = angular.module('suddenutils',[]);
   suddenutils.factory('_', ['$window', function($window) {
