@@ -17,9 +17,12 @@ var utils = function(){
     };
    self.get = function(objModel, strPath) {
         var arrProps = strPath.split('.'),
-            prop = objModel;
-        for(var i = 0, len = arrProps.length; i < len; i++) {
-            if (typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { prop = prop[arrProps[i]];} 
+            prop = objModel,
+            len = arrProps.length,i;
+        for(i = 0; i < len; i++) {
+            if (typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { 
+              prop = prop[arrProps[i]];
+            } 
             else { return null;}
         }
         return prop;
