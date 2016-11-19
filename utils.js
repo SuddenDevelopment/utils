@@ -4,6 +4,7 @@ var utils = function(){
   //----====|| UTILITY FUNCTIONS ||====----\\
   //get a value from a defined path in an object
    // https://jsperf.com/lodash-get-vs-monster-method/2
+   self.has = Object.prototype.hasOwnProperty;
    self.test = function(varSomething){ console.log('utils lib is working: ',varSomething); };
    //find the index of a given value in an array of objects 
    self.getIndex = function(arr, key, value) {
