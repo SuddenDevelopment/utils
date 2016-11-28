@@ -7,7 +7,66 @@ var utils = function(){
    self.has = Object.prototype.hasOwnProperty;
    self.test = function(varSomething){ console.log('utils lib is working: ',varSomething); };
    //find the index of a given value in an array of objects 
-   self.getIndex = function(arr, key, value) {
+//----====|| ARRAYS ||====----\\
+
+        //trick forEach, destructive to the array but fast
+    self.forEach = function(arr,fn){
+      var v,i=0;
+      while(v=arr.pop()){
+        fn(v,i); 
+        i++;
+      }
+    };
+    self.arrSort = function(a,b){
+      if (a.intSort < b.intSort)
+        return -1;
+      if (a.intSort > b.intSort)
+        return 1;
+      return 0;
+    };
+     self.for = function(arr,fn){ for(var i=arr.length-1;i>=0;i--){ fn(arr[i],i); } };
+        self.unique = function(arr) {
+      //found here: https://jsperf.com/array-unique-values/18
+      var set = [arr[0]],
+          bst = { v: arr[0], l: null, r: null };
+      for (var i = 1, len = arr.length; i < len; i++) {
+        var value = arr[i], root = bst, uv = true;
+        while (true) {
+          if (value > root.v) {
+            if (!root.r) {
+              root.r = { v: value, l: null, r: null };
+              break;
+            }
+            root = root.r;
+          } else if (value < root.v) {
+            if (!root.l) {
+              root.l = { v: value, l: null, r: null };
+              break;
+            }
+            root = root.l;
+          } else {
+            uv = false;
+            break;
+          }
+        }
+        if (uv) { set.push(value); }
+      }
+      return set;
+    };
+
+    //move the position of an element in the array
+    self.arrMove = function(arr,intOld,intNew){
+      //get the element
+      var v=arr[intOld];
+      //remove it from the array
+      arr.splice(intOld,1);
+      //insert it where it belongs
+      arr=arr.splice(intNew,0,v);
+      return arr;
+    }
+
+//----====|| COLLECTIONS ||====----\\
+    self.getIndex = function(arr, key, value) {
         for (var i=arr.length-1;i>=0;i--) {
             if (arr[i][key] === value) {
                 arr=[]; 
@@ -16,6 +75,7 @@ var utils = function(){
         }
         return -1;
     };
+//----====|| DEEP OBJECTS ||====----\\
    self.get = function(objModel, strPath) {
         var arrProps = strPath.split('.'),
             prop = objModel,
@@ -64,23 +124,10 @@ var utils = function(){
       });  
     };
     //for each property in an object
-     self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
-    //trick forEach, destructive to the array but fast
-     self.forEach = function(arr,fn){
-      var v,i=0;
-      while(v=arr.pop()){
-        fn(v,i); 
-        i++;
-      }
-    };
-    self.arrSort = function(a,b){
-      if (a.intSort < b.intSort)
-        return -1;
-      if (a.intSort > b.intSort)
-        return 1;
-      return 0;
-    };
-     self.for = function(arr,fn){ for(var i=arr.length-1;i>=0;i--){ fn(arr[i],i); } };
+    self.forOwn = function(obj,fn){ self.forEach(Object.keys(obj),function(v,k){ fn(obj[v],v); }); };
+
+
+
      self.defaults = function(objTarget,objDefaults){
       self.forOwn(objDefaults,function(v,k){ 
         if(!objTarget[k]){ objTarget[k]= v;}
@@ -122,35 +169,6 @@ var utils = function(){
         });
         return arrFresh;
       };
-
-    self.unique = function(arr) {
-      //found here: https://jsperf.com/array-unique-values/18
-      var set = [arr[0]],
-          bst = { v: arr[0], l: null, r: null };
-      for (var i = 1, len = arr.length; i < len; i++) {
-        var value = arr[i], root = bst, uv = true;
-        while (true) {
-          if (value > root.v) {
-            if (!root.r) {
-              root.r = { v: value, l: null, r: null };
-              break;
-            }
-            root = root.r;
-          } else if (value < root.v) {
-            if (!root.l) {
-              root.l = { v: value, l: null, r: null };
-              break;
-            }
-            root = root.l;
-          } else {
-            uv = false;
-            break;
-          }
-        }
-        if (uv) { set.push(value); }
-      }
-      return set;
-    };
 
     //----====|| STRINGS ||====----\\
     self.strCount = function(strNeedle,strHaystack,objOptions){
