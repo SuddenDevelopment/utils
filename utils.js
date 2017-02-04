@@ -33,7 +33,7 @@ var utils = function(){
       var tags = path.split("."), len = tags.length - 1;
       for (var i = 0; i < len; i++) {
         //set parent paths if they dont exist
-        if(!obj.hasOwnProperty(tags[i])){ obj[tags[i]]={}; }
+        if(typeof obj[tags[i]] === 'undefined'){ obj[tags[i]]={}; }
         obj = obj[tags[i]]; 
       }
       obj[tags[len]] = value;
