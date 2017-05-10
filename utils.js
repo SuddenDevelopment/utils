@@ -193,9 +193,11 @@ else{
   //this loads it in global
   var _ = new utils();
   //this is to load it in angular
-  var suddenutils = angular.module('suddenutils',[]);
-  suddenutils.factory('_', ['$window', function($window) {
-  return $window._;
-}]);
+  if(typeof angular !== 'undefined'){
+    var suddenutils = angular.module('suddenutils',[]);
+    suddenutils.factory('_', ['$window', function($window) {
+    return $window._;
+    }]);
+  }
 
 }
