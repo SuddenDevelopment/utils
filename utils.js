@@ -80,16 +80,9 @@ var utils = function(){
         var arrProps = strPath.split('.'),
             prop = objModel,
             len = arrProps.length,i;
-        for(var i = 0; i < len; i++) {
-            if(typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { prop = prop[arrProps[i]]; }
-            else if(arrProps[i]==='[]' && typeof prop !== 'undefined'){
-              var arrReturn=[];
-              //this is for an array where the next property
-              //console.log('get',arrProps[i-1],prop);
-              for(var ii=0; ii<prop.length; ii++){
-                if(typeof prop[ii][arrProps[i+1]] !== 'undefined'){ arrReturn.push(prop[ii][arrProps[i+1]]); }
-              }
-              return arrReturn;
+        for(i = 0; i < len; i++) {
+            if (typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { 
+              prop = prop[arrProps[i]];
             } 
             else { return null;}
         }
@@ -149,12 +142,16 @@ var utils = function(){
         self.forOwn(objData,function(v,k){
             //this requires recursion
             if(typeof v ==='object' && v!== null){ 
+                //console.log('object found',v);
                 //array recursion
                 if(v.constructor===Array){
+                  //console.log('array found',v);
                   for(var i=0;i<v.length;i++){
-                    self.forEach(self.deepKeys(v[i]),function(vv,kk){ 
-                    arrKeys.push(k+'.'+vv); 
-                  }); 
+                    if(typeof v[i] === 'object'){
+                      self.forEach(self.deepKeys(v[i]),function(vv,kk){ 
+                        arrKeys.push(k+'.'+vv);
+                      });
+                    } 
                   }
                 }
                 //object recursion
@@ -200,11 +197,9 @@ else{
   //this loads it in global
   var _ = new utils();
   //this is to load it in angular
-  if(typeof angular !== 'undefined'){
-    var suddenutils = angular.module('suddenutils',[]);
-    suddenutils.factory('_', ['$window', function($window) {
-    return $window._;
-    }]);
-  }
+  var suddenutils = angular.module('suddenutils',[]);
+  suddenutils.factory('_', ['$window', function($window) {
+  return $window._;
+}]);
 
 }
