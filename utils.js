@@ -80,22 +80,33 @@ var utils = function(){
         var arrProps = strPath.split('.'),
             prop = objModel,
             len = arrProps.length,i;
-        for(i = 0; i < len; i++) {
-            if (typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { 
-              prop = prop[arrProps[i]];
+        for(var i = 0; i < len; i++) {
+            if(typeof prop[arrProps[i]] !== 'undefined' && prop[arrProps[i]] !== null) { prop = prop[arrProps[i]]; }
+            else if(arrProps[i]==='[]' && typeof prop !== 'undefined'){
+              var arrReturn=[];
+              //this is for an array where the next property
+              //console.log('get',arrProps[i-1],prop);
+              for(var ii=0; ii<prop.length; ii++){
+                if(typeof prop[ii][arrProps[i+1]] !== 'undefined'){ arrReturn.push(prop[ii][arrProps[i+1]]); }
+              }
+              return arrReturn;
             } 
             else { return null;}
         }
         return prop;
-    };
+      }
     // credit: http://jsfiddle.net/jfriend00/Sxz2z/
     self.set = function(obj, path, value) {
       var tags = path.split("."), len = tags.length - 1;
       for (var i = 0; i < len; i++) {
         //set parent paths if they dont exist
-        if(typeof obj[tags[i]] === 'undefined'){ obj[tags[i]]={}; }
-        obj = obj[tags[i]]; 
+        if(typeof obj[tags[i]] === 'undefined'){ 
+          obj[tags[i]]={}; 
+          //console.log('path component not found, creating it');
+        }
+        obj = obj[tags[i]];
       }
+      //console.log(tags,len,tags[len],obj[tags[len]],value);
       obj[tags[len]] = value;
     };
     self.del = function(obj,path){
